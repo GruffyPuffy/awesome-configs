@@ -68,7 +68,7 @@ editor_cmd = terminal .. " -e " .. editor
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod1"
+modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -199,6 +199,7 @@ local docker_widget = require("awesome-wm-widgets.docker-widget.docker")
 local fs_widget = require("awesome-wm-widgets.fs-widget.fs-widget")
 local cpu_widget = require("awesome-wm-widgets.cpu-widget.cpu-widget")
 local ram_widget = require("awesome-wm-widgets.ram-widget.ram-widget")
+local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
@@ -254,6 +255,7 @@ awful.screen.connect_for_each_screen(function(s)
             mykeyboardlayout,
             wibox.widget.systray(),
             mytextclock,
+            batteryarc_widget(),
             logout_menu_widget{
                 font = 'Play 14',
                 onlock = function() awful.spawn.with_shell('i3lock-fancy') end
@@ -388,7 +390,12 @@ globalkeys = gears.table.join(
               {description = "take focued screenshot", group = "misc"}),
 
     awful.key({ }, "Print", function() awful.util.spawn_with_shell("scrot --exec 'mv $f ~/Pictures/Screenshots/'") end, 
-        {description = "take full screenshot", group = "misc"})              
+        {description = "take full screenshot", group = "misc"}),              
+
+    awful.key({ }, "XF86MonBrightnessDown", function ()
+        awful.util.spawn("/home/stefan/.config/awesome/brightness.sh -10") end),
+    awful.key({ }, "XF86MonBrightnessUp", function ()
+        awful.util.spawn("/home/stefan/.config/awesome/brightness.sh +10") end)
 
 )
 
